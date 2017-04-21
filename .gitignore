@@ -38,3 +38,6 @@ jspm_packages
 
 # Firebase admin configuration
 firebase-admin.config.json
+
+# Hub configuration
+hub.config.js
