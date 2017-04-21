@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/georgeF105/ioatt-node-device/issues"
   },
-  "homepage": "https://github.com/georgeF105/ioatt-node-device#readme"
+  "homepage": "https://github.com/georgeF105/ioatt-node-device#readme",
+  "dependencies": {
+    "firebase-admin": "^4.2.1"
+  }
 }
