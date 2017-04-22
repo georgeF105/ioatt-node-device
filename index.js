@@ -23,7 +23,7 @@ hubRef.on('value', (hub) => {
 
 function attachDeviceWatchers(deviceKeys) {
   deviceRefs.forEach(deviceRef => deviceRef.off());
-  
+
   deviceRefs = deviceKeys.map(key => {
     return db.ref(`devices/${key}`);
   });
@@ -40,5 +40,15 @@ function attachDeviceWatchers(deviceKeys) {
 }
 
 function deviceUpdated(deviceVal) {
-  console.log('device updated', deviceVal)
+  if (deviceVal.type = 'rfPlug') {
+    updatePlug(deviceVal);
+  }
+}
+
+function updatePlug(deviceVal) {
+  if (deviceVal.state) {
+    console.log('sending code', deviceVal.onCode);
+  } else {
+    console.log('sending code', deviceVal.offCode);
+  }
 }
