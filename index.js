@@ -3,6 +3,8 @@ var hubKey = require('./hub.config').hubKey;
 var serviceAccount = require('./firebase-admin.config.json');
 var exec = require('child_process').exec;
 
+console.log('starting Internet of all the things - node device');
+
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: 'https://angle-control.firebaseio.com'
@@ -56,7 +58,7 @@ function updatePlug(deviceVal) {
     cmd += deviceVal.offCode;
   }
 
-  exec(cmd + deviceVal.onCode, function(error, stdout, stderr) {
+  exec(cmd, function(error, stdout, stderr) {
     if (error) {
       console.log('error', error);
     }
