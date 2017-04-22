@@ -22,6 +22,8 @@ hubRef.on('value', (hub) => {
 });
 
 function attachDeviceWatchers(deviceKeys) {
+  deviceRefs.forEach(deviceRef => deviceRef.off());
+  
   deviceRefs = deviceKeys.map(key => {
     return db.ref(`devices/${key}`);
   });
