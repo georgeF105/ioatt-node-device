@@ -49,7 +49,7 @@ function attachDeviceWatchers(deviceKeys) {
 
 function updateDevice(deviceVal) {
   if (deviceVal.type = 'rfPlug') {
-    updatePlug(deviceVal);
+    return updatePlug(deviceVal);
   }
 }
 
@@ -63,8 +63,8 @@ function updatePlug(deviceVal) {
 
   exec(cmd, function(error, stdout, stderr) {
     if (error) {
-      return stderr;
       console.log('error', stderr);
+      return stderr;
     }
     console.log('stdout', stdout);
   });
