@@ -7,14 +7,36 @@ admin.initializeApp({
   databaseURL: 'https://angle-control.firebaseio.com'
 });
 
-console.log(hubKey);
-
 var db = admin.database();
 var hubRef = db.ref("hubs/" + hubKey);
 var deviceRefs = [];
 
 hubRef.on('value', (hub) => {
-  console.log('hub', hub.val());
+  var hubVal = hub.val();
+  var deviceKeys = Object.keys(hubVal.devices).map(key => {
+    return hubVal.devices[key].key;
+  });
+  attachDeviceWatchers(deviceKeys);
 }, (err) => {
   console.log('DeviceConnected update error:', err);
 });
+
+function attachDeviceWatchers(deviceKeys) {
+  deviceRefs = deviceKeys.map(key => {
+    return db.ref(`devices/${key}`);
+  });
+
+  deviceRefs.forEach(deviceRef => {
+    deviceRef.on('value', device => {
+      var deviceVal = device.val();
+      if (deviceVal.updated) {
+        deviceUpdated(deviceVal);
+      }
+      deviceRef.update({ updated: false });
+    });
+  });
+}
+
+function deviceUpdated(deviceVal) {
+  console.log('device updated', deviceVal)
+}
