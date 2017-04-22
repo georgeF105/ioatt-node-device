@@ -1,6 +1,7 @@
 var admin = require('firebase-admin');
 var hubKey = require('./hub.config').hubKey;
 var serviceAccount = require('./firebase-admin.config.json');
+var exec = require('child_process').exec;
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -46,9 +47,20 @@ function deviceUpdated(deviceVal) {
 }
 
 function updatePlug(deviceVal) {
+  var cmd = './scripts/send-plug-code ';
   if (deviceVal.state) {
     console.log('sending code', deviceVal.onCode);
+    cmd += deviceVal.onCode;    
   } else {
     console.log('sending code', deviceVal.offCode);
+    cmd += deviceVal.offCode;
   }
+
+  exec(cmd + deviceVal.onCode, function(error, stdout, stderr) {
+    if (error) {
+      console.log('error', error);
+    }
+    console.log('stdout', stdout);
+    console.log('stderr', stderr);
+  });
 }
