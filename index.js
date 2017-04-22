@@ -35,7 +35,7 @@ function attachDeviceWatchers(deviceKeys) {
     deviceRef.on('value', device => {
       var deviceVal = device.val();
       if (deviceVal.updated) {
-        let errorMessage = updateDevice(deviceVal);
+        var errorMessage = updateDevice(deviceVal);
 
         if (errorMessage) {
           deviceRef.update({ errorMessage: errorMessage });
