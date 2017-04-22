@@ -35,25 +35,30 @@ function attachDeviceWatchers(deviceKeys) {
     deviceRef.on('value', device => {
       var deviceVal = device.val();
       if (deviceVal.updated) {
-        var errorMessage = updateDevice(deviceVal);
+        var errorMessage = updateDevice(deviceVal, () => {
+          deviceRef.update({ updated: false, errorMessage: null });
+        }, (error) => {
+          console.log('logging error', error);
+          deviceRef.update({ errorMessage: error });
+        });
 
-        if (errorMessage) {
-          deviceRef.update({ errorMessage: errorMessage });
-        } else {
-          deviceRef.update({ updated: false });
-        }
+        // if (errorMessage) {
+        //   deviceRef.update({ errorMessage: errorMessage });
+        // } else {
+        //   deviceRef.update({ updated: false });
+        // }
       }
     });
   });
 }
 
-function updateDevice(deviceVal) {
+function updateDevice(deviceVal, successFn, errorFn) {
   if (deviceVal.type = 'rfPlug') {
-    return updatePlug(deviceVal);
+    return updatePlug(deviceVal, successFn, errorFn);
   }
 }
 
-function updatePlug(deviceVal) {
+function updatePlug(deviceVal, successFn, errorFn) {
   var cmd = './scripts/send-plug-code ';
   if (deviceVal.state) {
     cmd += deviceVal.onCode;    
@@ -64,9 +69,10 @@ function updatePlug(deviceVal) {
   exec(cmd, function(error, stdout, stderr) {
     if (error) {
       console.log('error', stderr);
-      return stderr;
+      errorFn(stderr);
+      return;
     }
     console.log('stdout', stdout);
+    successFn();
   });
-  return false;
 }
